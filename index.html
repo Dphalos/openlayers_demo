@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Using Parcel with OpenLayers</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+  </head>
+  <body>
+    <div id="map"></div>
+<!-- ONGOING FILTERING-->
+    <select onchange="changeMap()">
+      <option value="BingSat">Public_Transport</option>
+      <option value="BingRoad">Point of Interests</option>
+
+    </select>  
+<!-- FILTERING END -->
+    <script src="./index.js"></script>
+  </body>
+</html>
