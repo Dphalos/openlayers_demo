@@ -1,10 +1,14 @@
 import 'ol/ol.css';
 import {Map, View} from 'ol';
-import TileLayer from 'ol/layer/Tile';
+//import TileLayer from 'ol/layer/Tile';
 import TileWMS from 'ol/source/TileWMS';
 import OSM from 'ol/source/OSM';
 import LayerGroup from 'ol/layer/Group';
 
+import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+import {Draw, Modify, Snap} from 'ol/interaction';
+import {Vector as VectorSource} from 'ol/source';
+import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 
 var control, controls = [];
 
@@ -14,6 +18,43 @@ var layers = [
     source: new OSM(),
   })
 ];
+
+// #region Draw
+var source = new VectorSource();
+var layersRasterVector = new LayerGroup({
+  layers: [
+    new TileLayer({
+      source: new OSM(),
+    }),
+    new VectorLayer({
+      source: source,
+      style: new Style({
+        fill: new Fill({
+          color: 'rgba(255, 255, 255, 0.2)',
+        }),
+        stroke: new Stroke({
+          color: '#ffcc33',
+          width: 2,
+        }),
+        image: new CircleStyle({
+          radius: 7,
+          fill: new Fill({
+            color: '#ffcc33',
+          }),
+        }),
+      }),
+    }) ]
+});
+
+//#endregion
+
+
+
+
+var raster = new TileLayer({
+  source: new OSM(),
+});
+
 
 var layersDefault = new LayerGroup({
   layers: [
@@ -89,6 +130,7 @@ var layersRoads = new LayerGroup({
 //CREATING LAYER GROUPS END
   
 //Creating the map.
+/*
 var map = new Map({
   layers: layers,
   target: 'map',
@@ -97,7 +139,55 @@ var map = new Map({
     zoom: 0,
   }),
 });
+ */
+var map = new Map({
+  layers: layersRasterVector,
+  target: 'map',
+  view: new View({
+    center: [0, 0],
+    zoom: 0,
+  }),
+});
 
+
+//#region Draw2
+
+var modify = new Modify({source: source});
+map.addInteraction(modify);
+
+var draw, snap; // global so we can remove them later
+var typeSelect = document.getElementById('type');
+
+function addInteractions() {
+  draw = new Draw({
+    source: source,
+    type: typeSelect.value,
+  });
+  map.addInteraction(draw);
+  snap = new Snap({source: source});
+  map.addInteraction(snap);
+}
+
+/**
+ * Handle change event.
+ */
+typeSelect.onchange = function () {
+  map.removeInteraction(draw);
+  map.removeInteraction(snap);
+  addInteractions();
+};
+
+addInteractions();
+//#endregion Draw2
+/*var map = new Map({
+  layers: [raster, vector],
+  target: 'map',
+  view: new View({
+    center: [0, 0],
+    zoom: 0,
+  }),
+});
+*/
 
 //BUTTON TYPE LAYER CHANGE
 /*
@@ -115,7 +205,7 @@ document.getElementById("defaultMap").addEventListener("click", function() {
 });
 */
 
-//CHECKBOX TYPE LAYER CHANGE
+//#region Checkbox
 var transportCheckbox = document.querySelector("input[name=transportCheck]");
 var roadsCheckbox = document.querySelector("input[name=roadsCheck]");
 var placesCheckbox = document.querySelector("input[name=placesCheck]");
@@ -169,8 +259,7 @@ poisCheckbox.addEventListener( 'change', function() {
       map.removeLayer(layersPois);
   }
 });
-
-//LAYER CHANGE END
+//#endregion
 
 
 

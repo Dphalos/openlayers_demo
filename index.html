@@ -16,22 +16,32 @@
 -->
 <!-- Checkboxes to change layers-->
 <form action="/action_page.php">
-  <input type="checkbox" id="transportCheck" name="transportCheck" value="Bike">
+  <input type="checkbox" id="transportCheck" name="transportCheck" value="1">
   <label for="transportCheck"> Public Transport</label><br>
-  <input type="checkbox" id="roadsCheck" name="roadsCheck" value="Car">
+  <input type="checkbox" id="roadsCheck" name="roadsCheck" value="2">
   <label for="roadsCheck"> Roads</label><br>
-  <input type="checkbox" id="vehicle3" name="placesCheck" value="Boat">
+  <input type="checkbox" id="vehicle3" name="placesCheck" value="3">
   <label for="placesCheck"> Places</label><br>
-  <input type="checkbox" id="poisCheck" name="poisCheck" value="Car">
+  <input type="checkbox" id="poisCheck" name="poisCheck" value="4">
   <label for="poisCheck"> Point of Interests</label><br><br>
+</form>
+
+<!-- Drawing -->
+<form class="form-inline">
+  <label>Geometry type &nbsp;</label>
+  <select id="type">
+    <option value="Point">Point</option>
+    <option value="LineString">LineString</option>
+    <option value="Polygon">Polygon</option>
+    <option value="Circle">Circle</option>
+  </select>
 </form>
 
 
 
 
 
-
-    <script type="text/javascript" src="./index.js"></script>  
+    <script type="text/javascript" src="./index.js"></script> 
 
   </body>
 </html>
