@@ -8,7 +8,7 @@ import LayerGroup from 'ol/layer/Group';
 
 var control, controls = [];
 
-
+//CREATING LAYER GROUPS
 var layers = [
   new TileLayer({
     source: new OSM(),
@@ -24,9 +24,9 @@ var layersDefault = new LayerGroup({
 
 var layersRoads = new LayerGroup({
   layers: [
-  new TileLayer({
+ /* new TileLayer({
     source: new OSM(),
-  }),
+  }), */
   new TileLayer({
     source: new TileWMS({
       url: 'http://localhost:8080/geoserver/geo_test1/wms',
@@ -43,9 +43,9 @@ var layersRoads = new LayerGroup({
   var layersTransport = new LayerGroup({
     name: 'PublicTransportLayer',
     layers: [
-    new TileLayer({
+    /*new TileLayer({
       source: new OSM(),
-    }),
+    }), */
     new TileLayer({
       source: new TileWMS({
         url: 'http://localhost:8080/geoserver/geo_test1/wms',
@@ -56,7 +56,39 @@ var layersRoads = new LayerGroup({
     }) ]
   });
 
+
+  var layersPlaces = new LayerGroup({
+    name: 'PublicTransportLayer',
+    layers: [
+    /*new TileLayer({
+      source: new OSM(),
+    }), */
+    new TileLayer({
+      source: new TileWMS({
+        url: 'http://localhost:8080/geoserver/geo_test1/wms',
+        params: {'LAYERS': 'geo_test1:gis_osm_places_free_1', 'TILED': true},
+        serverType: 'geoserver',
+        transition: 0,
+      })
+    }) ]
+  });
+
+
+  var layersPois = new LayerGroup({
+    name: 'PublicTransportLayer',
+    layers: [
+    new TileLayer({
+      source: new TileWMS({
+        url: 'http://localhost:8080/geoserver/geo_test1/wms',
+        params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+        serverType: 'geoserver',
+        transition: 0,
+      })
+    }) ]
+  });
+//CREATING LAYER GROUPS END
   
+//Creating the map.
 var map = new Map({
   layers: layers,
   target: 'map',
@@ -67,7 +99,8 @@ var map = new Map({
 });
 
 
-
+//BUTTON TYPE LAYER CHANGE
+/*
 //document.getElementById("mySelect").addEventListener("Transport", console.log("a"));
 document.getElementById("transportMap").addEventListener("click", function() {
   map.setLayerGroup(layersTransport);
@@ -80,24 +113,71 @@ document.getElementById("roadsMap").addEventListener("click", function() {
 document.getElementById("defaultMap").addEventListener("click", function() {
   map.setLayerGroup(layersDefault);
 });
+*/
 
+//CHECKBOX TYPE LAYER CHANGE
+var transportCheckbox = document.querySelector("input[name=transportCheck]");
+var roadsCheckbox = document.querySelector("input[name=roadsCheck]");
+var placesCheckbox = document.querySelector("input[name=placesCheck]");
+var poisCheckbox = document.querySelector("input[name=poisCheck]");
+//var checkbox = document.querySelector("input[name=vehicle1]");
 
-var myFunction = function() {
-  var x = document.getElementById("mySelect").value;
-  if(x == 'Transport') {
-    //map.setLayerGroup(layersTransport);
-    //map.render();
-    console.log("transport_selected");
-    console.log(x);
-} else if (x == 'Roads') {
-    //map.setLayerGroup(layersRoads);
-    console.log("roads_selected");
-}
-  else if(x =='None'){
-    //map.setLayerGroup(new ol.layer.Group());
-    console.log("empty_map");
+transportCheckbox.addEventListener( 'change', function() {
+    if(this.checked) {
+        // Checkbox is checked..
+        console.log("checked");
+        map.addLayer(layersTransport);
+    } else {
+        // Checkbox is not checked..
+        console.log("not checked");
+        map.removeLayer(layersTransport);
+    }
+});
+
+roadsCheckbox.addEventListener( 'change', function() {
+  if(this.checked) {
+      // Checkbox is checked..
+      console.log("checked");
+      map.addLayer(layersRoads);
+  } else {
+      // Checkbox is not checked..
+      console.log("not checked");
+      map.removeLayer(layersRoads);
   }
-}
+});
+
+placesCheckbox.addEventListener( 'change', function() {
+  if(this.checked) {
+      // Checkbox is checked..
+      console.log("checked");
+      map.addLayer(layersPlaces);
+  } else {
+      // Checkbox is not checked..
+      console.log("not checked");
+      map.removeLayer(layersPlaces);
+  }
+});
+
+poisCheckbox.addEventListener( 'change', function() {
+  if(this.checked) {
+      // Checkbox is checked..
+      console.log("checked");
+      map.addLayer(layersPois);
+  } else {
+      // Checkbox is not checked..
+      console.log("not checked");
+      map.removeLayer(layersPois);
+  }
+});
+
+//LAYER CHANGE END
+
+
+
+
+
+
+
 
 //layers.setVisible(true);
 

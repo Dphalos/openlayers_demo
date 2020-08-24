@@ -2,18 +2,35 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Using Parcel with OpenLayers</title>
+    <title>Demo</title>
     <link rel="stylesheet" type="text/css" href="style.css"/>
   </head>
   <body>
     <div id="map"></div>
 
 
-<!-- ONGOING FILTERING-->
+<!-- Buttons to change layers
 <button id="defaultMap">Empty</button>
 <button id="transportMap">Public Transport</button>
 <button id="roadsMap">Roads</button>
-<!-- FILTERING END -->
+-->
+<!-- Checkboxes to change layers-->
+<form action="/action_page.php">
+  <input type="checkbox" id="transportCheck" name="transportCheck" value="Bike">
+  <label for="transportCheck"> Public Transport</label><br>
+  <input type="checkbox" id="roadsCheck" name="roadsCheck" value="Car">
+  <label for="roadsCheck"> Roads</label><br>
+  <input type="checkbox" id="vehicle3" name="placesCheck" value="Boat">
+  <label for="placesCheck"> Places</label><br>
+  <input type="checkbox" id="poisCheck" name="poisCheck" value="Car">
+  <label for="poisCheck"> Point of Interests</label><br><br>
+</form>
+
+
+
+
+
+
     <script type="text/javascript" src="./index.js"></script>  
 
   </body>
