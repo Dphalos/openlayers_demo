@@ -4,11 +4,15 @@ import {Map, View} from 'ol';
 import TileWMS from 'ol/source/TileWMS';
 import OSM from 'ol/source/OSM';
 import LayerGroup from 'ol/layer/Group';
+import GeoJSON from 'ol/format/GeoJSON';
 
-import {Circle as CircleStyle, Fill, Stroke, Style} from 'ol/style';
+//Draw imports
+import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Draw, Modify, Snap} from 'ol/interaction';
 import {Vector as VectorSource} from 'ol/source';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
+import { fromLonLat } from 'ol/proj';
+
 
 var control, controls = [];
 
@@ -19,7 +23,30 @@ var layers = [
   })
 ];
 
-// #region Draw
+
+ //Style
+ var style = new Style({
+  fill: new Fill({
+    color: 'rgba(255, 255, 255, 0.6)',
+  }),
+  stroke: new Stroke({
+    color: '#319FD3',
+    width: 1,
+  }),
+  text: new Text({
+    font: '12px Calibri,sans-serif',
+    fill: new Fill({
+      color: '#000',
+    }),
+    stroke: new Stroke({
+      color: '#fff',
+      width: 3,
+    }),
+  }),
+});
+//Style
+
+// #region Draw declaration
 var source = new VectorSource();
 var layersRasterVector = new LayerGroup({
   layers: [
@@ -48,9 +75,7 @@ var layersRasterVector = new LayerGroup({
 
 //#endregion
 
-
-
-
+//#region Layers
 var raster = new TileLayer({
   source: new OSM(),
 });
@@ -99,7 +124,7 @@ var layersRoads = new LayerGroup({
 
 
   var layersPlaces = new LayerGroup({
-    name: 'PublicTransportLayer',
+    name: 'PlacesLayer',
     layers: [
     /*new TileLayer({
       source: new OSM(),
@@ -116,18 +141,18 @@ var layersRoads = new LayerGroup({
 
 
   var layersPois = new LayerGroup({
-    name: 'PublicTransportLayer',
+    name: 'PointofInterestsLayer',
     layers: [
     new TileLayer({
       source: new TileWMS({
         url: 'http://localhost:8080/geoserver/geo_test1/wms',
         params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
         serverType: 'geoserver',
-        transition: 0,
+        transition: 0
       })
     }) ]
   });
-//CREATING LAYER GROUPS END
+//#endregion Layers
   
 //Creating the map.
 /*
@@ -144,13 +169,12 @@ var map = new Map({
   layers: layersRasterVector,
   target: 'map',
   view: new View({
-    center: [0, 0],
-    zoom: 0,
+    center: fromLonLat([34, 39]),
+    zoom: 6,
   }),
 });
 
-
-//#region Draw2
+// #region Draw2
 
 var modify = new Modify({source: source});
 map.addInteraction(modify);
@@ -168,9 +192,8 @@ function addInteractions() {
   map.addInteraction(snap);
 }
 
-/**
- * Handle change event.
- */
+//Handle change event.
+ 
 typeSelect.onchange = function () {
   map.removeInteraction(draw);
   map.removeInteraction(snap);
@@ -178,7 +201,9 @@ typeSelect.onchange = function () {
 };
 
 addInteractions();
-//#endregion Draw2
+// #endregion Draw2
+
+
 /*var map = new Map({
   layers: [raster, vector],
   target: 'map',
@@ -266,6 +291,24 @@ poisCheckbox.addEventListener( 'change', function() {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+map.on('click', function(e){
+map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
+  console.log(feature);
+})
+
+}
+)
 
 
 //layers.setVisible(true);
