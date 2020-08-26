@@ -5,7 +5,7 @@ import TileWMS from 'ol/source/TileWMS';
 import OSM from 'ol/source/OSM';
 import LayerGroup from 'ol/layer/Group';
 import GeoJSON from 'ol/format/GeoJSON';
-
+import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 //Draw imports
 import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Draw, Modify, Snap} from 'ol/interaction';
@@ -89,13 +89,17 @@ var layersDefault = new LayerGroup({
 });
 
 var layersRoads = new LayerGroup({
+  name: 'RoadsLayer',
   layers: [
-  new TileLayer({
-    source: new TileWMS({
-      url: 'http://localhost:8080/geoserver/geo_test1/wms',
-      params: {'LAYERS': '	geo_test1:gis_osm_roads_free_1', 'TILED': true},
-      serverType: 'geoserver',
-      transition: 0,
+  new VectorLayer({
+    source: new VectorSource({
+      url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_roads_free_1&maxFeatures=5000&outputFormat=application%2Fjson',
+      //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+      //serverType: 'geoserver',
+      //transition: 0,
+      strategy: bboxStrategy,
+      format: new GeoJSON(),
+      crossOrigin: 'Anonymous'
     })
   }) ]
 });
@@ -128,6 +132,7 @@ var layersRoads = new LayerGroup({
   });
 
 /*
+//EXAMPLE WMS LAYER (IMAGE)
   var layersPois = new LayerGroup({
     name: 'PointofInterestsLayer',
     layers: [
@@ -140,7 +145,43 @@ var layersRoads = new LayerGroup({
       })
     }) ]
   });
+
+//EXAMPLE GEOJSON LAYER
+var layersPois = new LayerGroup({
+  name: 'PointofInterestsLayer',
+  layers: [
+  new VectorLayer({
+    source: new VectorSource({
+      url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_pois_free_1&maxFeatures=250&outputFormat=application%2Fjson',
+      //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+      //serverType: 'geoserver',
+      //transition: 0,
+      format: new GeoJSON(),
+      crossOrigin: 'Anonymous'
+    })
+  }) ]
+});
 */
+  var layersPois = new LayerGroup({
+    name: 'PointofInterestsLayer',
+    layers: [
+    new VectorLayer({
+      source: new VectorSource({
+        url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_pois_free_1&maxFeatures=250&outputFormat=application%2Fjson',
+        //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+        //serverType: 'geoserver',
+        //transition: 0,
+        format: new GeoJSON(),
+        crossOrigin: 'Anonymous'
+      })
+    }) ]
+  });
+
+//#endregion
+
+
+
+
   var layersPois = new LayerGroup({
     name: 'PointofInterestsLayer',
     layers: [

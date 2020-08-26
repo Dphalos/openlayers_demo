@@ -94960,6 +94960,8 @@ var _Group = _interopRequireDefault(require("ol/layer/Group"));
 
 var _GeoJSON = _interopRequireDefault(require("ol/format/GeoJSON"));
 
+var _loadingstrategy = require("ol/loadingstrategy");
+
 var _style = require("ol/style");
 
 var _interaction = require("ol/interaction");
@@ -95036,15 +95038,16 @@ var layersDefault = new _Group.default({
   })]
 });
 var layersRoads = new _Group.default({
-  layers: [new _layer.Tile({
-    source: new _TileWMS.default({
-      url: 'http://localhost:8080/geoserver/geo_test1/wms',
-      params: {
-        'LAYERS': '	geo_test1:gis_osm_roads_free_1',
-        'TILED': true
-      },
-      serverType: 'geoserver',
-      transition: 0
+  name: 'RoadsLayer',
+  layers: [new _layer.Vector({
+    source: new _source.Vector({
+      url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_roads_free_1&maxFeatures=5000&outputFormat=application%2Fjson',
+      //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+      //serverType: 'geoserver',
+      //transition: 0,
+      strategy: _loadingstrategy.bbox,
+      format: new _GeoJSON.default(),
+      crossOrigin: 'Anonymous'
     })
   })]
 });
@@ -95077,6 +95080,7 @@ var layersPlaces = new _Group.default({
   })]
 });
 /*
+//EXAMPLE WMS LAYER (IMAGE)
   var layersPois = new LayerGroup({
     name: 'PointofInterestsLayer',
     layers: [
@@ -95089,7 +95093,37 @@ var layersPlaces = new _Group.default({
       })
     }) ]
   });
+
+//EXAMPLE GEOJSON LAYER
+var layersPois = new LayerGroup({
+  name: 'PointofInterestsLayer',
+  layers: [
+  new VectorLayer({
+    source: new VectorSource({
+      url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_pois_free_1&maxFeatures=250&outputFormat=application%2Fjson',
+      //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+      //serverType: 'geoserver',
+      //transition: 0,
+      format: new GeoJSON(),
+      crossOrigin: 'Anonymous'
+    })
+  }) ]
+});
 */
+
+var layersPois = new _Group.default({
+  name: 'PointofInterestsLayer',
+  layers: [new _layer.Vector({
+    source: new _source.Vector({
+      url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_pois_free_1&maxFeatures=250&outputFormat=application%2Fjson',
+      //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+      //serverType: 'geoserver',
+      //transition: 0,
+      format: new _GeoJSON.default(),
+      crossOrigin: 'Anonymous'
+    })
+  })]
+}); //#endregion
 
 var layersPois = new _Group.default({
   name: 'PointofInterestsLayer',
@@ -95248,7 +95282,7 @@ map.addLayer(public_transport);
 map.addControl(new ol.control.LayerSwitcher());
 
 */
-},{"ol/ol.css":"node_modules/ol/ol.css","ol":"node_modules/ol/index.js","ol/source/TileWMS":"node_modules/ol/source/TileWMS.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/layer/Group":"node_modules/ol/layer/Group.js","ol/format/GeoJSON":"node_modules/ol/format/GeoJSON.js","ol/style":"node_modules/ol/style.js","ol/interaction":"node_modules/ol/interaction.js","ol/source":"node_modules/ol/source.js","ol/layer":"node_modules/ol/layer.js","ol/proj":"node_modules/ol/proj.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"ol/ol.css":"node_modules/ol/ol.css","ol":"node_modules/ol/index.js","ol/source/TileWMS":"node_modules/ol/source/TileWMS.js","ol/source/OSM":"node_modules/ol/source/OSM.js","ol/layer/Group":"node_modules/ol/layer/Group.js","ol/format/GeoJSON":"node_modules/ol/format/GeoJSON.js","ol/loadingstrategy":"node_modules/ol/loadingstrategy.js","ol/style":"node_modules/ol/style.js","ol/interaction":"node_modules/ol/interaction.js","ol/source":"node_modules/ol/source.js","ol/layer":"node_modules/ol/layer.js","ol/proj":"node_modules/ol/proj.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -95276,7 +95310,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63038" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54237" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
