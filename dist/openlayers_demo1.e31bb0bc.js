@@ -95036,11 +95036,7 @@ var layersDefault = new _Group.default({
   })]
 });
 var layersRoads = new _Group.default({
-  layers: [
-  /* new TileLayer({
-     source: new OSM(),
-   }), */
-  new _layer.Tile({
+  layers: [new _layer.Tile({
     source: new _TileWMS.default({
       url: 'http://localhost:8080/geoserver/geo_test1/wms',
       params: {
@@ -95054,11 +95050,7 @@ var layersRoads = new _Group.default({
 });
 var layersTransport = new _Group.default({
   name: 'PublicTransportLayer',
-  layers: [
-  /*new TileLayer({
-    source: new OSM(),
-  }), */
-  new _layer.Tile({
+  layers: [new _layer.Tile({
     source: new _TileWMS.default({
       url: 'http://localhost:8080/geoserver/geo_test1/wms',
       params: {
@@ -95072,11 +95064,7 @@ var layersTransport = new _Group.default({
 });
 var layersPlaces = new _Group.default({
   name: 'PlacesLayer',
-  layers: [
-  /*new TileLayer({
-    source: new OSM(),
-  }), */
-  new _layer.Tile({
+  layers: [new _layer.Tile({
     source: new _TileWMS.default({
       url: 'http://localhost:8080/geoserver/geo_test1/wms',
       params: {
@@ -95088,32 +95076,34 @@ var layersPlaces = new _Group.default({
     })
   })]
 });
+/*
+  var layersPois = new LayerGroup({
+    name: 'PointofInterestsLayer',
+    layers: [
+    new TileLayer({
+      source: new TileWMS({
+        url: 'http://localhost:8080/geoserver/geo_test1/wms',
+        params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+        serverType: 'geoserver',
+        transition: 0
+      })
+    }) ]
+  });
+*/
+
 var layersPois = new _Group.default({
   name: 'PointofInterestsLayer',
-  layers: [new _layer.Tile({
-    source: new _TileWMS.default({
-      url: 'http://localhost:8080/geoserver/geo_test1/wms',
-      params: {
-        'LAYERS': 'geo_test1:gis_osm_pois_free_1',
-        'TILED': true
-      },
-      serverType: 'geoserver',
-      transition: 0
+  layers: [new _layer.Vector({
+    source: new _source.Vector({
+      url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_pois_free_1&maxFeatures=250&outputFormat=application%2Fjson',
+      //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+      //serverType: 'geoserver',
+      //transition: 0,
+      format: new _GeoJSON.default(),
+      crossOrigin: 'Anonymous'
     })
   })]
 }); //#endregion Layers
-//Creating the map.
-
-/*
-var map = new Map({
-  layers: layers,
-  target: 'map',
-  view: new View({
-    center: [0, 0],
-    zoom: 0,
-  }),
-});
- */
 
 var map = new _ol2.Map({
   layers: layersRasterVector,
@@ -95232,7 +95222,7 @@ poisCheckbox.addEventListener('change', function () {
 
 map.on('click', function (e) {
   map.forEachFeatureAtPixel(e.pixel, function (feature, layer) {
-    console.log(feature);
+    console.log(feature.getProperties().name);
   });
 }); //layers.setVisible(true);
 
@@ -95286,7 +95276,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63538" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63038" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

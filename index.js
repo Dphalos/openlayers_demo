@@ -9,7 +9,7 @@ import GeoJSON from 'ol/format/GeoJSON';
 //Draw imports
 import {Circle as CircleStyle, Fill, Stroke, Style, Text} from 'ol/style';
 import {Draw, Modify, Snap} from 'ol/interaction';
-import {Vector as VectorSource} from 'ol/source';
+import {Vector as VectorSource, Vector} from 'ol/source';
 import {Tile as TileLayer, Vector as VectorLayer} from 'ol/layer';
 import { fromLonLat } from 'ol/proj';
 
@@ -90,9 +90,6 @@ var layersDefault = new LayerGroup({
 
 var layersRoads = new LayerGroup({
   layers: [
- /* new TileLayer({
-    source: new OSM(),
-  }), */
   new TileLayer({
     source: new TileWMS({
       url: 'http://localhost:8080/geoserver/geo_test1/wms',
@@ -103,15 +100,9 @@ var layersRoads = new LayerGroup({
   }) ]
 });
 
-
-
-
-  var layersTransport = new LayerGroup({
+ var layersTransport = new LayerGroup({
     name: 'PublicTransportLayer',
     layers: [
-    /*new TileLayer({
-      source: new OSM(),
-    }), */
     new TileLayer({
       source: new TileWMS({
         url: 'http://localhost:8080/geoserver/geo_test1/wms',
@@ -126,9 +117,6 @@ var layersRoads = new LayerGroup({
   var layersPlaces = new LayerGroup({
     name: 'PlacesLayer',
     layers: [
-    /*new TileLayer({
-      source: new OSM(),
-    }), */
     new TileLayer({
       source: new TileWMS({
         url: 'http://localhost:8080/geoserver/geo_test1/wms',
@@ -139,7 +127,7 @@ var layersRoads = new LayerGroup({
     }) ]
   });
 
-
+/*
   var layersPois = new LayerGroup({
     name: 'PointofInterestsLayer',
     layers: [
@@ -152,19 +140,24 @@ var layersRoads = new LayerGroup({
       })
     }) ]
   });
+*/
+  var layersPois = new LayerGroup({
+    name: 'PointofInterestsLayer',
+    layers: [
+    new VectorLayer({
+      source: new VectorSource({
+        url: 'http://localhost:8080/geoserver/geo_test1/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=geo_test1%3Agis_osm_pois_free_1&maxFeatures=250&outputFormat=application%2Fjson',
+        //params: {'LAYERS': 'geo_test1:gis_osm_pois_free_1', 'TILED': true},
+        //serverType: 'geoserver',
+        //transition: 0,
+        format: new GeoJSON(),
+        crossOrigin: 'Anonymous'
+      })
+    }) ]
+  });
 //#endregion Layers
   
-//Creating the map.
-/*
-var map = new Map({
-  layers: layers,
-  target: 'map',
-  view: new View({
-    center: [0, 0],
-    zoom: 0,
-  }),
-});
- */
+
 var map = new Map({
   layers: layersRasterVector,
   target: 'map',
@@ -173,6 +166,7 @@ var map = new Map({
     zoom: 6,
   }),
 });
+
 
 // #region Draw2
 
@@ -287,30 +281,12 @@ poisCheckbox.addEventListener( 'change', function() {
 //#endregion
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 map.on('click', function(e){
-map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
-  console.log(feature);
-})
-
-}
+  map.forEachFeatureAtPixel(e.pixel, function(feature, layer){
+    console.log(feature.getProperties().name);
+   })
+  }
 )
-
-
 //layers.setVisible(true);
 
 /*
